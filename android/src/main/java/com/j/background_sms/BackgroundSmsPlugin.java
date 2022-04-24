@@ -60,25 +60,17 @@ public class BackgroundSmsPlugin implements FlutterPlugin, MethodCallHandler {
   }
 
   private void isSupportCustomSim(Result result){
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+   
       result.success(true);
-    }else{
-      result.success(false);
-    }
+    
   }
 
   private void sendSMS(String num, String msg, Integer simSlot,Result result) {
     try {
       SmsManager smsManager;
-      if (simSlot == null) {
-        smsManager = SmsManager.getDefault();
-      } else {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          smsManager = SmsManager.getSmsManagerForSubscriptionId(simSlot);
-        } else {
-          smsManager = SmsManager.getDefault();
-        }
-      }
+
+      smsManager = SmsManager.getSmsManagerForSubscriptionId(simSlot);
+
       smsManager.sendTextMessage(num, null, msg, null, null);
       result.success("Sent");
     } catch (Exception ex) {
